@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuickCart Checkout</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🛒 QuickCart Checkout</h2>
+
+<label>Select Product</label>
+
+<select id="product">
+<option value="1200">Laptop Bag - ₹1200</option>
+<option value="800">Wireless Mouse - ₹800</option>
+<option value="1500">Keyboard - ₹1500</option>
+<option value="2200">Headphones - ₹2200</option>
+</select>
+
+<label>Quantity</label>
+
+<input type="number" id="qty" placeholder="Enter Quantity">
+
+<label>Coupon Code</label>
+
+<input type="text" id="coupon" placeholder="Example: SAVE10">
+
+<label>Delivery Type</label>
+
+<select id="delivery">
+<option value="50">Standard Delivery</option>
+<option value="150">Express Delivery</option>
+</select>
+
+<div class="checkbox">
+<input type="checkbox" id="gift">
+Gift Wrap (+₹100)
+</div>
+
+<button onclick="calculate()">Calculate Total</button>
+<button class="reset" onclick="resetForm()">Reset</button>
+
+<h3 id="total">Grand Total : ₹0</h3>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
