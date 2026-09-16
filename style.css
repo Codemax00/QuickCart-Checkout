@@ -187,6 +187,17 @@ button:active {
     background: #475569;
 }
 
+.logout {
+    width: 100%;
+    background: #b91c1c;
+    box-shadow: 0 4px 6px -1px rgba(185, 28, 28, 0.2);
+}
+
+.logout:hover {
+    box-shadow: 0 10px 15px -3px rgba(185, 28, 28, 0.4);
+    background: #991b1b;
+}
+
 #msg {
     margin-top: 18px;
     text-align: center;
@@ -200,6 +211,22 @@ button:active {
 }
 
 #msg.error {
+    color: #ef4444;
+}
+
+#checkoutMsg {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    min-height: 20px;
+}
+
+#checkoutMsg.success {
+    color: #10b981;
+}
+
+#checkoutMsg.error {
     color: #ef4444;
 }
 

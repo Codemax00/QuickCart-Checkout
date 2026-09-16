@@ -1,8 +1,15 @@
+const AUTH_KEY = "quickcartIsLoggedIn";
+
+function setMessage(elementId, message, type = "") {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    el.textContent = message;
+    el.className = type;
+}
+
 // Tab Switching
 function switchTab(tab) {
-    // Clear messages
-    document.getElementById("msg").innerHTML = "";
-    document.getElementById("msg").className = "";
+    setMessage("msg", "");
 
     if (tab === 'signin') {
         document.getElementById("signInTab").classList.add("active");
@@ -34,36 +41,29 @@ function signUp() {
     let email = document.getElementById("regEmail").value.trim();
     let password = document.getElementById("regPassword").value;
     let confirmPassword = document.getElementById("regConfirmPassword").value;
-    let msgEl = document.getElementById("msg");
-
     if (!username || !email || !password || !confirmPassword) {
-        msgEl.innerHTML = "All fields are required!";
-        msgEl.className = "error";
+        setMessage("msg", "All fields are required!", "error");
         return;
     }
 
     if (username.length < 3) {
-        msgEl.innerHTML = "Username must be at least 3 characters.";
-        msgEl.className = "error";
+        setMessage("msg", "Username must be at least 3 characters.", "error");
         return;
     }
 
     let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
-        msgEl.innerHTML = "Please enter a valid email address.";
-        msgEl.className = "error";
+        setMessage("msg", "Please enter a valid email address.", "error");
         return;
     }
 
     if (password.length < 6) {
-        msgEl.innerHTML = "Password must be at least 6 characters.";
-        msgEl.className = "error";
+        setMessage("msg", "Password must be at least 6 characters.", "error");
         return;
     }
 
     if (password !== confirmPassword) {
-        msgEl.innerHTML = "Passwords do not match!";
-        msgEl.className = "error";
+        setMessage("msg", "Passwords do not match!", "error");
         return;
     }
 
@@ -72,8 +72,7 @@ function signUp() {
     // Check if username is already taken
     let userExists = users.some(u => u.username.toLowerCase() === username.toLowerCase());
     if (userExists || username.toLowerCase() === "tester") {
-        msgEl.innerHTML = "Username is already taken!";
-        msgEl.className = "error";
+        setMessage("msg", "Username is already taken!", "error");
         return;
     }
 
@@ -81,8 +80,7 @@ function signUp() {
     users.push({ username, email, password });
     saveUsers(users);
 
-    msgEl.innerHTML = "Registration successful! Switching to Sign In...";
-    msgEl.className = "success";
+    setMessage("msg", "Registration successful! Switching to Sign In...", "success");
 
     // Clear register form
     clearFields('signup');
@@ -99,18 +97,15 @@ function signUp() {
 function login() {
     let username = document.getElementById("username").value.trim();
     let password = document.getElementById("password").value;
-    let msgEl = document.getElementById("msg");
-
     if (!username || !password) {
-        msgEl.innerHTML = "Please enter username and password.";
-        msgEl.className = "error";
+        setMessage("msg", "Please enter username and password.", "error");
         return;
     }
 
     // 1. Check hardcoded tester credentials first
     if (username === "tester" && password === "Test@123") {
-        msgEl.innerHTML = "Login successful! Redirecting...";
-        msgEl.className = "success";
+        sessionStorage.setItem(AUTH_KEY, "true");
+        setMessage("msg", "Login successful! Redirecting...", "success");
         setTimeout(() => {
             window.location.href = "dashboard.html";
         }, 1000);
@@ -122,14 +117,13 @@ function login() {
     let user = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
 
     if (user) {
-        msgEl.innerHTML = "Login successful! Redirecting...";
-        msgEl.className = "success";
+        sessionStorage.setItem(AUTH_KEY, "true");
+        setMessage("msg", "Login successful! Redirecting...", "success");
         setTimeout(() => {
             window.location.href = "dashboard.html";
         }, 1000);
     } else {
-        msgEl.innerHTML = "Invalid Username or Password";
-        msgEl.className = "error";
+        setMessage("msg", "Invalid Username or Password", "error");
     }
 }
 
@@ -146,18 +140,33 @@ function clearFields(formType) {
     } else {
         document.getElementById("username").value = "";
         document.getElementById("password").value = "";
-        document.getElementById("msg").innerHTML = "";
-        document.getElementById("msg").className = "";
+        setMessage("msg", "");
     }
+}
+
+function requireAuthForDashboard() {
+    if (!window.location.pathname.endsWith("dashboard.html")) return;
+    if (sessionStorage.getItem(AUTH_KEY) !== "true") {
+        window.location.href = "index.html";
+    }
+}
+
+function logout() {
+    sessionStorage.removeItem(AUTH_KEY);
+    window.location.href = "index.html";
 }
 
 function calculate() {
 
-    let price = parseInt(document.getElementById("product").value);
+    let price = parseInt(document.getElementById("product").value, 10);
+    let qty = parseInt(document.getElementById("qty").value, 10);
+    let delivery = parseInt(document.getElementById("delivery").value, 10);
 
-    let qty = parseInt(document.getElementById("qty").value);
-
-    let delivery = parseInt(document.getElementById("delivery").value);
+    if (!Number.isInteger(qty) || qty <= 0) {
+        setMessage("checkoutMsg", "Enter a valid quantity greater than 0.", "error");
+        document.getElementById("total").textContent = "Grand Total : ₹0";
+        return;
+    }
 
     let total = price * qty;
 
@@ -165,13 +174,14 @@ function calculate() {
         total = total + 100;
     }
 
-    if (document.getElementById("coupon").value === "SAVE10") {
+    if (document.getElementById("coupon").value.trim().toUpperCase() === "SAVE10") {
         total = total - 100;
     }
 
     total = total + delivery;
 
-    document.getElementById("total").innerHTML = "Grand Total : ₹" + total;
+    document.getElementById("total").textContent = "Grand Total : ₹" + total;
+    setMessage("checkoutMsg", "", "");
 
 }
 
@@ -182,6 +192,9 @@ function resetForm() {
     document.getElementById("coupon").value = "";
     document.getElementById("delivery").selectedIndex = 0;
     document.getElementById("gift").checked = false;
-    document.getElementById("total").innerHTML = "Grand Total : ₹0";
+    document.getElementById("total").textContent = "Grand Total : ₹0";
+    setMessage("checkoutMsg", "", "");
 
 }
+
+requireAuthForDashboard();
