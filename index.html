@@ -19,8 +19,8 @@
   <!-- Sign In Form -->
   <div id="signInForm" class="form-group active">
     <h2>Sign In</h2>
-    <input type="text" id="username" placeholder="Enter Username">
-    <input type="password" id="password" placeholder="Enter Password">
+    <input type="text" id="username" placeholder="Enter Username" autocomplete="username">
+    <input type="password" id="password" placeholder="Enter Password" autocomplete="current-password">
     <div class="checkbox">
       <input type="checkbox" id="rememberMe"> Remember Me
     </div>
@@ -33,10 +33,10 @@
   <!-- Sign Up Form -->
   <div id="signUpForm" class="form-group">
     <h2>Sign Up</h2>
-    <input type="text" id="regUsername" placeholder="Enter Username">
-    <input type="email" id="regEmail" placeholder="Enter Email">
-    <input type="password" id="regPassword" placeholder="Enter Password">
-    <input type="password" id="regConfirmPassword" placeholder="Confirm Password">
+    <input type="text" id="regUsername" placeholder="Enter Username" autocomplete="username">
+    <input type="email" id="regEmail" placeholder="Enter Email" autocomplete="email">
+    <input type="password" id="regPassword" placeholder="Enter Password" autocomplete="new-password">
+    <input type="password" id="regConfirmPassword" placeholder="Confirm Password" autocomplete="new-password">
     <div class="button-container">
       <button onclick="signUp()">Register</button>
       <button class="reset" onclick="clearFields('signup')">Clear</button>

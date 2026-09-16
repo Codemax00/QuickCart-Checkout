@@ -24,7 +24,7 @@
 
 <label>Quantity</label>
 
-<input type="number" id="qty" placeholder="Enter Quantity">
+<input type="number" id="qty" placeholder="Enter Quantity" min="1">
 
 <label>Coupon Code</label>
 
@@ -44,8 +44,10 @@ Gift Wrap (+₹100)
 
 <button onclick="calculate()">Calculate Total</button>
 <button class="reset" onclick="resetForm()">Reset</button>
+<button class="logout" onclick="logout()">Logout</button>
 
 <h3 id="total">Grand Total : ₹0</h3>
+<p id="checkoutMsg"></p>
 
 </div>
 
